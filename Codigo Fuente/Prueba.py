@@ -42,3 +42,46 @@ def buscar_canciones(relacion):
             resultados.append((cancion, artista, album))
 
     return resultados
+# Función para mostrar los resultados de la búsqueda en la interfaz gráfica
+def mostrar_resultados():
+    relacion = entrada.get()
+    canciones_relacionadas = buscar_canciones(relacion)
+
+    for widget in resultados_frame.winfo_children():
+        widget.destroy()
+
+    for i, resultado in enumerate(canciones_relacionadas):
+        # Calcular las coordenadas de las celdas en la cuadrícula
+        row = i // 3  # Número de fila
+        column = i % 3  # Número de columna
+
+        # Crear un Frame para cada conjunto de datos de canción
+        cancion_frame = tk.LabelFrame(resultados_frame, bg='black', padx=10, pady=5)
+        cancion_frame.grid(row=row, column=column, padx=10, pady=5)
+
+        # Crear un Frame interno para la imagen y los datos
+        contenido_frame = tk.Frame(cancion_frame, bg='gray')
+        contenido_frame.pack(padx=5, pady=5)
+
+        imagen = imagenes.get(resultado[0])
+        if imagen:
+            imagen = imagen.resize((80, 80), Image.ANTIALIAS)
+            imagen = ImageTk.PhotoImage(imagen)
+            imagen_label = tk.Label(contenido_frame, image=imagen, bg='gray')
+            imagen_label.image = imagen
+            imagen_label.pack()
+
+        cancion_label = tk.Label(contenido_frame, text=resultado[0], font=('Arial', 12, 'bold'), wraplength=200, anchor='w', bg='gray')
+        cancion_label.pack()
+
+        artista_label = tk.Label(contenido_frame, text=resultado[1], font=('Arial', 10), wraplength=200, anchor='w', bg='gray')
+        artista_label.pack()
+
+        album_label = tk.Label(contenido_frame, text=resultado[2], font=('Arial', 10), wraplength=200, anchor='w', bg='gray')
+        album_label.pack()
+
+# Crear la ventana principal
+ventana = tk.Tk()
+ventana.title("TrackTastic - Búsqueda de canciones")
+ventana.geometry("1137x600")
+ventana.config(bg="green")
