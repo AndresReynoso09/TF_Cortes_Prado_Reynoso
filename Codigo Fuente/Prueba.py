@@ -85,3 +85,39 @@ ventana = tk.Tk()
 ventana.title("TrackTastic - Búsqueda de canciones")
 ventana.geometry("1137x600")
 ventana.config(bg="green")
+
+# Crear el canvas para los resultados con barra de desplazamiento
+canvas = tk.Canvas(ventana)
+canvas.pack(side="left", fill="both", expand=True)
+
+scrollbar_vertical = tk.Scrollbar(ventana, command=canvas.yview)
+scrollbar_vertical.pack(side="right", fill="y")
+
+resultados_frame = tk.Frame(canvas, bg='black')  # Establecer color de fondo de la sección de canciones a negro
+resultados_frame.pack(pady=10)
+
+canvas.create_window((0, 0), window=resultados_frame, anchor="nw")
+canvas.config(yscrollcommand=scrollbar_vertical.set)
+
+# Configurar el desplazamiento
+def configure_canvas(event):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+resultados_frame.bind("<Configure>", configure_canvas)
+canvas.configure(yscrollcommand=scrollbar_vertical.set)
+
+# Crear los elementos de la interfaz gráfica
+etiqueta = tk.Label(ventana, text="Ingrese una palabra o letra relacionada:", font=('Arial', 14))
+etiqueta.pack(padx=10, pady=10)
+
+entrada = tk.Entry(ventana, font=('Arial', 12))
+entrada.pack(padx=10, pady=10)
+
+boton = tk.Button(ventana, text='Buscar', font=('Arial', 14), command=mostrar_resultados)
+boton.pack(padx=10, pady=10)
+
+# Posicionar el logo más abajo
+logo_label = tk.Label(ventana, text="TrackTastic", font=('Arial', 20, 'bold'), fg="#020202")
+logo_label.place(relx=0.83, rely=0.5, anchor='center')  # Ajusta la posición vertical con rely
+
+ventana.mainloop()
